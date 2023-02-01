@@ -1,0 +1,5 @@
+class ConverterExceptions(Exception):
+    pass
+
+
+
