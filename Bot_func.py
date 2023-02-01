@@ -31,7 +31,7 @@ def convert(message: telebot.types.Message):
         base, quote, amount = values
         if not values[2].isdigit():
             raise ConverterExceptions('Вы не ввели число')
-        if base not in text_worker.txt_currency().keys() and quote not in text_worker.txt_currency().keys():
+        if base not in text_worker.txt_currency().keys() or quote not in text_worker.txt_currency().keys():
             raise ConverterExceptions('Вы ввели несуществующую валюту')
         if base == quote:
             raise ConverterExceptions(f'Нельзя переводить одинаковые валюты "{quote}"')
@@ -40,6 +40,8 @@ def convert(message: telebot.types.Message):
                                              amount=amount)
     except ConverterExceptions as error:
         bot.send_message(message.chat.id, f'\n{error}')
+    except Exception as error:
+        bot.send_message(message.chat.id, f'Что то пошло не так... {error}')
     else:
         text = f'Цена {amount} {base} в {quote} - {round(conversion_result)}'
         bot.send_message(message.chat.id, text)
